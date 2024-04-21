@@ -1,16 +1,22 @@
 package com.example.racingevent.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.Data;
+import jakarta.persistence.*;
 
-@Data
+import java.util.Set;
+
 @Entity
-public class Racer {
-    @Id
-    private Long id;
+@Table(name = "racer")
+public class Racer extends AbstractEntity {
+
+    @Column(name = "rc_name")
     private String name;
+    @Column(name = "car_model")
     private String carModel;
+    @Column(name = "team_name")
     private String teamName;
-    private Long event_id;
+
+    @OneToMany(mappedBy = "racer")
+    private Set<RacerEvent> racerEvents;
+
+
 }

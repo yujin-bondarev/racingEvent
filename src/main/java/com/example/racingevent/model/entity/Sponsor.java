@@ -1,16 +1,20 @@
 package com.example.racingevent.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.Data;
+import jakarta.persistence.*;
 
-@Data
+import java.time.LocalDateTime;
+
 @Entity
-public class Sponsor {
-    @Id
-    private Long id;
-    private String name;
-    private float budget;
-    private String dateOfContract;
-    private Long event_id;
+@Table(name = "sponsor")
+public class Sponsor extends AbstractEntity{
+
+    @Column(name = "sp_name")
+    private String spName;
+    @Column(name = "sp_budget")
+    private String spBudget;
+    @Column(name = "date_contract")
+    private LocalDateTime dateOfContract;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RacingEvent event;
 }

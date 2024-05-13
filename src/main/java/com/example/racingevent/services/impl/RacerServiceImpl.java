@@ -74,8 +74,8 @@ public class RacerServiceImpl implements RacerService {
     }
 
     @Override
-    public List<Racer> readByEvent(RacingEvent event) {
-        return racerRepository.findByRacerEvents_RacingEvent(event);
+    public List<Racer> readByEvent(long eventId) {
+        return racerRepository.findByRacerEvents_RacingEvent(eventId);
     }
 
     @Override

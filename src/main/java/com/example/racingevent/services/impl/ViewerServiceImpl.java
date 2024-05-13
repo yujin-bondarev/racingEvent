@@ -74,8 +74,8 @@ public class ViewerServiceImpl implements ViewerService {
     }
 
     @Override
-    public List<Viewer> readByEvent(RacingEvent event) {
-        return viewerRepository.findByViewerEvents_RacingEvent(event);
+    public List<Viewer> readByEvent(long eventId) {
+        return viewerRepository.findByViewerEvents_RacingEvent(eventId);
     }
 
     @Override

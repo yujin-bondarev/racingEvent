@@ -74,8 +74,8 @@ public class SponsorServiceImpl implements SponsorService {
     }
 
     @Override
-    public List<Sponsor> readByEvent(RacingEvent event) {
-        return sponsorRepository.findBySponsorEvents_RacingEvent(event);
+    public List<Sponsor> readByEvent(long eventId) {
+        return sponsorRepository.findBySponsorEvents_RacingEvent(eventId);
     }
 
     @Override

@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
     List<Sponsor> findBySpName(String spName);
-    List<Sponsor> findBySponsorEvents_RacingEvent(RacingEvent event);
+    List<Sponsor> findBySponsorEvents_RacingEvent(long id);
 }

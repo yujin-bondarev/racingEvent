@@ -1,4 +1,14 @@
 package com.example.racingevent.services;
 
-public interface ViewerService {
+import com.example.racingevent.model.entity.RacingEvent;
+import com.example.racingevent.model.entity.Viewer;
+
+import java.util.List;
+
+public interface ViewerService extends Service<Viewer> {
+    List<Viewer> readByEvent(RacingEvent event);
+    List<Viewer> readByName(String vwName);
+
+    List<Viewer> readByTicketType(String ticketType);
 }
+

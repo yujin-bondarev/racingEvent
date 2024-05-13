@@ -1,29 +1,43 @@
 package com.example.racingevent.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "racing_event")
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class RacingEvent extends AbstractEntity{
 
     @Column(name = "event_name")
-    private String event_name;
+    private String name;
     @Column(name = "event_date")
-    private LocalDateTime event_date;
+    private LocalDateTime date;
     @Column(name = "location")
     private String location;
 
-    @OneToMany(mappedBy="racing_event")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy="racing_event", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Set<Sponsor> sponsors;
 
-    @OneToMany(mappedBy="racing_event")
-    private Set<RacerEvent> racers;
+    @ManyToMany
+    @JoinTable(
+            name = "racer_event",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "rc_id")
+    )
+    private Set<Racer> racers;
 
-    @OneToMany(mappedBy="racing_event")
-    private Set<ViewerEvent> viewers;
+    @ManyToMany
+    @JoinTable(
+            name = "viewer_event",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "vw_id")
+    )
+    private Set<Viewer> viewers;
 
 
 }

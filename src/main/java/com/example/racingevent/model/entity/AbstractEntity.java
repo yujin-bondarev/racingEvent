@@ -40,6 +40,4 @@ public abstract class AbstractEntity {
             return other.id == null;
         } else return id.equals(other.id);
     }
-
-
 }

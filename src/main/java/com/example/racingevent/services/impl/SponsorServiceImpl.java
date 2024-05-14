@@ -12,7 +12,9 @@ import java.util.List;
 
 @Service
 public class SponsorServiceImpl implements SponsorService {
+    @Autowired
     private final SponsorRepository sponsorRepository;
+    @Autowired
     private final RacingEventRepository racingEventRepository;
 
     @Autowired
@@ -34,7 +36,7 @@ public class SponsorServiceImpl implements SponsorService {
     @Override
     public void save(Sponsor entity) {
         // Получаем мероприятие (RacingEvent), к которому принадлежит спонсор
-        RacingEvent event = (RacingEvent) entity.getEvent();
+        RacingEvent event = entity.getSpEvents();
         Long eventId = event.getId();
         event = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
         // Добавляем спонсора в список спонсоров мероприятия
@@ -49,7 +51,7 @@ public class SponsorServiceImpl implements SponsorService {
         // Находим спонсора по ID
         Sponsor sponsor = sponsorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         // Получаем мероприятие, к которому принадлежит спонсор
-        RacingEvent event = (RacingEvent) sponsor.getEvent();
+        RacingEvent event = sponsor.getSpEvents();
         // Удаляем спонсора из списка спонсоров мероприятия
         event.getSponsors().remove(sponsor);
         racingEventRepository.save(event);
@@ -63,10 +65,10 @@ public class SponsorServiceImpl implements SponsorService {
         Sponsor existingSponsor = sponsorRepository.findById(entity.getId()).orElseThrow(IllegalArgumentException::new);
         // Обновляем свойства спонсора
         existingSponsor.setSpName(entity.getSpName());
-        existingSponsor.setSpBudget(entity.getSpBudget());
+        existingSponsor.setBudget(entity.getBudget());
         existingSponsor.setDateOfContract(entity.getDateOfContract());
         // Обновляем список спонсоров мероприятия (если необходимо)
-        RacingEvent event = (RacingEvent) existingSponsor.getEvent();
+        RacingEvent event = existingSponsor.getSpEvents();
         event.getSponsors().add(existingSponsor);
         racingEventRepository.save(event);
         // Сохраняем обновленного спонсора
@@ -75,7 +77,7 @@ public class SponsorServiceImpl implements SponsorService {
 
     @Override
     public List<Sponsor> readByEvent(long eventId) {
-        return sponsorRepository.findBySponsorEvents_RacingEvent(eventId);
+        return sponsorRepository.findBySpEvents_Id(eventId);
     }
 
     @Override

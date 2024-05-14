@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class RacingEventServiceImpl implements RacingEventService {
+    @Autowired
     private final RacingEventRepository racingEventRepository;
 
     @Autowired
@@ -45,7 +46,7 @@ public class RacingEventServiceImpl implements RacingEventService {
     @Override
     public void edit(RacingEvent entity) {
         RacingEvent existingEvent = racingEventRepository.findById(entity.getId()).orElseThrow(IllegalArgumentException::new);
-        existingEvent.setName(entity.getName());
+        existingEvent.setEventName(entity.getEventName());
         existingEvent.setDate(entity.getDate());
         existingEvent.setLocation(entity.getLocation());
         racingEventRepository.save(existingEvent);

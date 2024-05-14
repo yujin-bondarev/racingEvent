@@ -1,7 +1,6 @@
 package com.example.racingevent.services.impl;
 
 import com.example.racingevent.model.entity.RacingEvent;
-import com.example.racingevent.model.entity.Sponsor;
 import com.example.racingevent.model.entity.Viewer;
 import com.example.racingevent.model.repositories.RacingEventRepository;
 import com.example.racingevent.model.repositories.ViewerRepository;
@@ -13,7 +12,9 @@ import java.util.List;
 
 @Service
 public class ViewerServiceImpl implements ViewerService {
+    @Autowired
     private final ViewerRepository viewerRepository;
+    @Autowired
     private final RacingEventRepository racingEventRepository;
 
     @Autowired
@@ -34,48 +35,37 @@ public class ViewerServiceImpl implements ViewerService {
 
     @Override
     public void save(Viewer entity) {
-        // Получаем мероприятие (RacingEvent), к которому принадлежит зритель
-        RacingEvent event = (RacingEvent) entity.getEvent();
+        RacingEvent event = (RacingEvent) entity.getVwEvents();
         Long eventId = event.getId();
         event = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
-        // Добавляем зрителя в список зрителей мероприятия
         event.getViewers().add(entity);
         racingEventRepository.save(event);
-        // Сохраняем зрителя
         viewerRepository.save(entity);
     }
 
     @Override
     public void delete(Long id) {
-        // Находим зрителя по ID
         Viewer viewer = viewerRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        // Получаем мероприятие, к которому принадлежит зритель
-        RacingEvent event = (RacingEvent) viewer.getEvent();
-        // Удаляем зрителя из списка зрителей мероприятия
+        RacingEvent event = (RacingEvent) viewer.getVwEvents();
         event.getViewers().remove(viewer);
         racingEventRepository.save(event);
-        // Удаляем зрителя
         viewerRepository.deleteById(id);
     }
 
     @Override
     public void edit(Viewer entity) {
-        // Находим зрителя по ID
         Viewer existingViewer = viewerRepository.findById(entity.getId()).orElseThrow(IllegalArgumentException::new);
-        // Обновляем свойства зрителя
         existingViewer.setVwName(entity.getVwName());
         existingViewer.setTicketType(entity.getTicketType());
-        // Обновляем список зрителей мероприятия (если необходимо)
-        RacingEvent event = (RacingEvent) existingViewer.getEvent();
+        RacingEvent event = (RacingEvent) existingViewer.getVwEvents();
         event.getViewers().add(existingViewer);
         racingEventRepository.save(event);
-        // Сохраняем обновленного зрителя
         viewerRepository.save(existingViewer);
     }
 
     @Override
     public List<Viewer> readByEvent(long eventId) {
-        return viewerRepository.findByViewerEvents_RacingEvent(eventId);
+        return viewerRepository.findByVwEvents_Id(eventId);
     }
 
     @Override

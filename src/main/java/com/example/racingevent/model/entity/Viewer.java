@@ -2,14 +2,17 @@ package com.example.racingevent.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "viewer")
-@Data
+@AttributeOverride(name = "id", column = @Column(name = "`vw_id`"))
+@Getter
+@Setter
+@ToString
 @EqualsAndHashCode(callSuper = false)
 public class Viewer extends AbstractEntity {
     @Column(name = "vw_name")
@@ -23,6 +26,6 @@ public class Viewer extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Set<RacingEvent> event;
+    private Set<RacingEvent> vwEvents = new HashSet<>();
 
 }

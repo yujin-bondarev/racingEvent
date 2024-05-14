@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/racer")
 public class RacerController extends AbstractController<Racer> {
-
+    @Autowired
     private final RacerService racerService;
 
     @Autowired

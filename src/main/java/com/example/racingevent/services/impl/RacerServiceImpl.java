@@ -12,7 +12,9 @@ import java.util.List;
 
 @Service
 public class RacerServiceImpl implements RacerService {
+    @Autowired
     private final RacerRepository racerRepository;
+    @Autowired
     private final RacingEventRepository racingEventRepository;
 
     @Autowired
@@ -33,49 +35,37 @@ public class RacerServiceImpl implements RacerService {
 
     @Override
     public void save(Racer entity) {
-        RacingEvent event = (RacingEvent) entity.getRacingEvent();
+            RacingEvent event = (RacingEvent) entity.getRcEvents();
         Long eventId = event.getId();
         event = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
-        // Добавляем гонщика в список гонщиков мероприятия
         event.getRacers().add(entity);
         racingEventRepository.save(event);
-        // Сохраняем гонщика
         racerRepository.save(entity);
     }
 
     @Override
     public void delete(Long id) {
-        // Находим гонщика по ID
         Racer racer = racerRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        // Получаем мероприятие, к которому принадлежит гонщик
-        RacingEvent event = (RacingEvent) racer.getRacingEvent();
-        // Удаляем гонщика из списка гонщиков мероприятия
+        RacingEvent event = (RacingEvent) racer.getRcEvents();
         event.getRacers().remove(racer);
         racingEventRepository.save(event);
-        // Удаляем гонщика
         racerRepository.deleteById(id);
     }
 
     @Override
     public void edit(Racer entity) {
-        // Находим гонщика по ID
         Racer existingRacer = racerRepository.findById(entity.getId()).orElseThrow(IllegalArgumentException::new);
-        // Получаем мероприятие, к которому принадлежит гонщик
-        RacingEvent event = (RacingEvent) existingRacer.getRacingEvent();
-        // Обновляем свойства гонщика
+        RacingEvent event = (RacingEvent) existingRacer.getRcEvents();
         existingRacer.setName(entity.getName());
         existingRacer.setCarModel(entity.getCarModel());
-        existingRacer.setTeamName(entity.getTeamName());
-        // Обновляем список гонщиков мероприятия (если необходимо)
         event.getRacers().add(existingRacer);
         racingEventRepository.save(event);
-        // Сохраняем обновленного гонщика
         racerRepository.save(existingRacer);
     }
 
     @Override
     public List<Racer> readByEvent(long eventId) {
-        return racerRepository.findByRacerEvents_RacingEvent(eventId);
+        return racerRepository.findByRcEvents_Id(eventId);
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/viewer")
 public class ViewerController extends AbstractController<Viewer> {
-
+    @Autowired
     private final ViewerService viewerService;
 
     @Autowired

@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/racingEvent")
 public class RacingEventController extends AbstractController<RacingEvent> {
-
+    @Autowired
     private final RacingEventService racingEventService;
 
     @Autowired
@@ -31,7 +31,6 @@ public class RacingEventController extends AbstractController<RacingEvent> {
         }
         return new ResponseEntity<>(events, headers, HttpStatus.OK);
     }
-
 
     @Override
     public RacingEventService getService() {

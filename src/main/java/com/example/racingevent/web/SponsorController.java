@@ -1,10 +1,7 @@
 package com.example.racingevent.web;
 
-import com.example.racingevent.model.entity.RacingEvent;
 import com.example.racingevent.model.entity.Sponsor;
-import com.example.racingevent.model.entity.Viewer;
 import com.example.racingevent.services.SponsorService;
-import com.example.racingevent.services.ViewerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/sponsor")
 public class SponsorController extends AbstractController<Sponsor> {
-
+    @Autowired
     private final SponsorService sponsorService;
 
     @Autowired

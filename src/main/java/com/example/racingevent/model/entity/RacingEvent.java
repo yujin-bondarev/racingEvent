@@ -1,5 +1,6 @@
 package com.example.racingevent.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,10 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "racing_event")
 @AttributeOverride(name = "id", column = @Column(name = "`event_id`"))
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@Getter @Setter @ToString
 public class RacingEvent extends AbstractEntity{
 
     @Column(name = "event_name")
@@ -23,24 +21,13 @@ public class RacingEvent extends AbstractEntity{
     private LocalDateTime date;
     @Column(name = "location")
     private String location;
-    @ManyToMany(mappedBy = "rcEvents")
-  //  @JoinTable(
-  //          name = "racer_event",
-  //          joinColumns = @JoinColumn(name = "event_id"),
-  //          inverseJoinColumns = @JoinColumn(name = "rc_id")
-  //  )
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "rcEvents", cascade = {CascadeType.ALL})
     private Set<Racer> racers = new HashSet<>();
-    @ManyToMany(mappedBy = "vwEvents")
-  //  @JoinTable(
-  //          name = "viewer_event",
-  //          joinColumns = @JoinColumn(name = "event_id"),
-  //          inverseJoinColumns = @JoinColumn(name = "vw_id")
-  //  )
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "vwEvents", cascade = {CascadeType.ALL})
     private Set<Viewer> viewers = new HashSet<>();
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy="spEvents", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    private Set<Sponsor> sponsors;
-
-
+    private Set<Sponsor> sponsors = new HashSet<>();
 }

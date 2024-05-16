@@ -1,5 +1,6 @@
 package com.example.racingevent.services.impl;
 
+import com.example.racingevent.model.entity.Racer;
 import com.example.racingevent.model.entity.RacingEvent;
 import com.example.racingevent.model.entity.Viewer;
 import com.example.racingevent.model.repositories.RacingEventRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ViewerServiceImpl implements ViewerService {
@@ -35,20 +37,11 @@ public class ViewerServiceImpl implements ViewerService {
 
     @Override
     public void save(Viewer entity) {
-        RacingEvent event = (RacingEvent) entity.getVwEvents();
-        Long eventId = event.getId();
-        event = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
-        event.getViewers().add(entity);
-        racingEventRepository.save(event);
         viewerRepository.save(entity);
     }
 
     @Override
     public void delete(Long id) {
-        Viewer viewer = viewerRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        RacingEvent event = (RacingEvent) viewer.getVwEvents();
-        event.getViewers().remove(viewer);
-        racingEventRepository.save(event);
         viewerRepository.deleteById(id);
     }
 
@@ -61,6 +54,17 @@ public class ViewerServiceImpl implements ViewerService {
         event.getViewers().add(existingViewer);
         racingEventRepository.save(event);
         viewerRepository.save(existingViewer);
+    }
+
+    @Override
+    public Viewer assignEventToViewer(Long vwId, Long eventId) {
+        Set<RacingEvent> eventSet = null;
+        Viewer viewer = viewerRepository.findById(vwId).orElseThrow(IllegalArgumentException::new);
+        RacingEvent racingEvent = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
+        eventSet =  viewer.getVwEvents();
+        eventSet.add(racingEvent);
+        viewer.setVwEvents(eventSet);
+        return viewerRepository.save(viewer);
     }
 
     @Override

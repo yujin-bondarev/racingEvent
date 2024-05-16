@@ -10,16 +10,13 @@ import java.util.Set;
 @Entity
 @Table(name = "viewer")
 @AttributeOverride(name = "id", column = @Column(name = "`vw_id`"))
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@Getter @Setter @ToString
 public class Viewer extends AbstractEntity {
     @Column(name = "vw_name")
     private String vwName;
     @Column(name = "ticket_type")
     private String ticketType;
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "viewer_event",
             joinColumns = @JoinColumn(name = "vw_id"),

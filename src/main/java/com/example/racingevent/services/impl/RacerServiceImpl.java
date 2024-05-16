@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RacerServiceImpl implements RacerService {
@@ -35,20 +36,11 @@ public class RacerServiceImpl implements RacerService {
 
     @Override
     public void save(Racer entity) {
-            RacingEvent event = (RacingEvent) entity.getRcEvents();
-        Long eventId = event.getId();
-        event = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
-        event.getRacers().add(entity);
-        racingEventRepository.save(event);
         racerRepository.save(entity);
     }
 
     @Override
     public void delete(Long id) {
-        Racer racer = racerRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        RacingEvent event = (RacingEvent) racer.getRcEvents();
-        event.getRacers().remove(racer);
-        racingEventRepository.save(event);
         racerRepository.deleteById(id);
     }
 
@@ -61,6 +53,16 @@ public class RacerServiceImpl implements RacerService {
         event.getRacers().add(existingRacer);
         racingEventRepository.save(event);
         racerRepository.save(existingRacer);
+    }
+
+    public Racer assignEventToRacer(Long rcId, Long eventId) {
+        Set<RacingEvent> eventSet = null;
+        Racer racer = racerRepository.findById(rcId).orElseThrow(IllegalArgumentException::new);
+        RacingEvent racingEvent = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
+        eventSet =  racer.getRcEvents();
+        eventSet.add(racingEvent);
+        racer.setRcEvents(eventSet);
+        return racerRepository.save(racer);
     }
 
     @Override

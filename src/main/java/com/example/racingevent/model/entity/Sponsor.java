@@ -9,10 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "sponsor")
 @AttributeOverride(name = "id", column = @Column(name = "`sp_id`"))
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@Getter @Setter @ToString
 public class Sponsor extends AbstractEntity{
 
     @Column(name = "sp_name")

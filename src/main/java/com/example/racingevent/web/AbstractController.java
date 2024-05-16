@@ -38,13 +38,13 @@ public abstract class AbstractController<T extends AbstractEntity> {
         return new ResponseEntity<>(entity, headers, HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("/edit")
     public ResponseEntity<String> put(@RequestBody T entity) {
         getService().save(entity);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<String> post(@RequestBody T entity) {
         getService().save(entity);
         return new ResponseEntity<>(HttpStatus.OK);

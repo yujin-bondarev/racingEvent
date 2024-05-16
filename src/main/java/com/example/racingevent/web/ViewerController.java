@@ -1,20 +1,18 @@
 package com.example.racingevent.web;
 
+import com.example.racingevent.model.entity.Racer;
 import com.example.racingevent.model.entity.RacingEvent;
 import com.example.racingevent.model.entity.Viewer;
 import com.example.racingevent.services.ViewerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/viewer")
+@RequestMapping("/viewer")
 public class ViewerController extends AbstractController<Viewer> {
     @Autowired
     private final ViewerService viewerService;
@@ -40,6 +38,14 @@ public class ViewerController extends AbstractController<Viewer> {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(viewers, headers, HttpStatus.OK);
+    }
+
+    @PutMapping("/{vwId}/racingEvent/{eventId}")
+    public Viewer assignRacingEventToRacer(
+            @PathVariable Long vwId,
+            @PathVariable Long eventId
+    ){
+        return viewerService.assignEventToViewer(vwId, eventId);
     }
 
     @Override

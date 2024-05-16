@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/racingEvent")
+@RequestMapping("/racingEvent")
 public class RacingEventController extends AbstractController<RacingEvent> {
     @Autowired
     private final RacingEventService racingEventService;

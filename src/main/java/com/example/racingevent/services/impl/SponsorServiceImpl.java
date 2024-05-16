@@ -1,5 +1,6 @@
 package com.example.racingevent.services.impl;
 
+import com.example.racingevent.model.entity.Racer;
 import com.example.racingevent.model.entity.RacingEvent;
 import com.example.racingevent.model.entity.Sponsor;
 import com.example.racingevent.model.repositories.RacingEventRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class SponsorServiceImpl implements SponsorService {
@@ -35,44 +37,30 @@ public class SponsorServiceImpl implements SponsorService {
 
     @Override
     public void save(Sponsor entity) {
-        // Получаем мероприятие (RacingEvent), к которому принадлежит спонсор
-        RacingEvent event = entity.getSpEvents();
-        Long eventId = event.getId();
-        event = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
-        // Добавляем спонсора в список спонсоров мероприятия
-        event.getSponsors().add(entity);
-        racingEventRepository.save(event);
-        // Сохраняем спонсора
         sponsorRepository.save(entity);
     }
 
     @Override
     public void delete(Long id) {
-        // Находим спонсора по ID
-        Sponsor sponsor = sponsorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        // Получаем мероприятие, к которому принадлежит спонсор
-        RacingEvent event = sponsor.getSpEvents();
-        // Удаляем спонсора из списка спонсоров мероприятия
-        event.getSponsors().remove(sponsor);
-        racingEventRepository.save(event);
-        // Удаляем спонсора
         sponsorRepository.deleteById(id);
     }
 
     @Override
     public void edit(Sponsor entity) {
-        // Находим спонсора по ID
         Sponsor existingSponsor = sponsorRepository.findById(entity.getId()).orElseThrow(IllegalArgumentException::new);
-        // Обновляем свойства спонсора
         existingSponsor.setSpName(entity.getSpName());
         existingSponsor.setBudget(entity.getBudget());
         existingSponsor.setDateOfContract(entity.getDateOfContract());
-        // Обновляем список спонсоров мероприятия (если необходимо)
         RacingEvent event = existingSponsor.getSpEvents();
         event.getSponsors().add(existingSponsor);
         racingEventRepository.save(event);
-        // Сохраняем обновленного спонсора
         sponsorRepository.save(existingSponsor);
+    }
+
+    public Sponsor assignEventToSponsor(Sponsor sponsor, Long eventId) {
+        RacingEvent racingEvent = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
+        sponsor.setSpEvents(racingEvent);
+        return sponsorRepository.save(sponsor);
     }
 
     @Override

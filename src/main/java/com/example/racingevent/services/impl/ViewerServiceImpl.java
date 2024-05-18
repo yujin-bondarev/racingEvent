@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ViewerServiceImpl implements ViewerService {
@@ -36,35 +37,29 @@ public class ViewerServiceImpl implements ViewerService {
     }
 
     @Override
-    public void save(Viewer entity) {
-        viewerRepository.save(entity);
-    }
-
-    @Override
     public void delete(Long id) {
         viewerRepository.deleteById(id);
     }
 
     @Override
     public void edit(Viewer entity) {
-        Viewer existingViewer = viewerRepository.findById(entity.getId()).orElseThrow(IllegalArgumentException::new);
+        Viewer existingViewer = viewerRepository.findById(entity.getId()).orElseThrow(() -> new IllegalArgumentException("Racer not found"));
+        Set<RacingEvent> events = entity.getVwEvents().stream()
+                .map(event -> racingEventRepository.findById(event.getId()).orElseThrow(() -> new IllegalArgumentException("Event with id " + event.getId() + " not found")))
+                .collect(Collectors.toSet());
         existingViewer.setVwName(entity.getVwName());
         existingViewer.setTicketType(entity.getTicketType());
-        RacingEvent event = (RacingEvent) existingViewer.getVwEvents();
-        event.getViewers().add(existingViewer);
-        racingEventRepository.save(event);
+        existingViewer.setVwEvents(events);
         viewerRepository.save(existingViewer);
     }
 
     @Override
-    public Viewer assignEventToViewer(Long vwId, Long eventId) {
-        Set<RacingEvent> eventSet = null;
-        Viewer viewer = viewerRepository.findById(vwId).orElseThrow(IllegalArgumentException::new);
-        RacingEvent racingEvent = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
-        eventSet =  viewer.getVwEvents();
-        eventSet.add(racingEvent);
-        viewer.setVwEvents(eventSet);
-        return viewerRepository.save(viewer);
+    public void save(Viewer entity) {
+        Set<RacingEvent> events = entity.getVwEvents().stream()
+                .map(event -> racingEventRepository.findById(event.getId()).orElseThrow(() -> new IllegalArgumentException("Event with id " + event.getId() + " not found")))
+                .collect(Collectors.toSet());
+        entity.setVwEvents(events);
+        viewerRepository.save(entity);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.example.racingevent.services.impl;
 
 import com.example.racingevent.model.entity.RacingEvent;
+import com.example.racingevent.model.entity.Viewer;
 import com.example.racingevent.model.repositories.RacingEventRepository;
+import com.example.racingevent.model.repositories.ViewerRepository;
 import com.example.racingevent.services.RacingEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import java.util.List;
 public class RacingEventServiceImpl implements RacingEventService {
     @Autowired
     private final RacingEventRepository racingEventRepository;
+    @Autowired
+    private ViewerRepository viewerRepository;
 
     @Autowired
     public RacingEventServiceImpl(RacingEventRepository racingEventRepository) {
@@ -43,13 +47,18 @@ public class RacingEventServiceImpl implements RacingEventService {
         return racingEventRepository.findByEventName(eventName);
     }
 
-    @Override
+    //@Override
     public void edit(RacingEvent entity) {
         RacingEvent existingEvent = racingEventRepository.findById(entity.getId()).orElseThrow(IllegalArgumentException::new);
         existingEvent.setEventName(entity.getEventName());
         existingEvent.setDate(entity.getDate());
         existingEvent.setLocation(entity.getLocation());
         racingEventRepository.save(existingEvent);
+    }
+
+    @Override
+    public List<Viewer> getEventViewersByTicketType(Long eventId, String ticketType) {
+        return viewerRepository.findByVwEvents_IdAndTicketType(eventId, ticketType);
     }
 }
 

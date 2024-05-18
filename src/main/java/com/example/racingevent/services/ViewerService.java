@@ -10,6 +10,6 @@ public interface ViewerService extends Service<Viewer> {
     List<Viewer> readByEvent(long eventId);
     List<Viewer> readByName(String vwName);
     List<Viewer> readByTicketType(String ticketType);
-    Viewer assignEventToViewer(Long vwId, Long eventId);
+
 }
 

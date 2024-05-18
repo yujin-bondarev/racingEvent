@@ -10,6 +10,6 @@ import java.util.List;
 public interface SponsorService extends Service<Sponsor> {
     List<Sponsor> readByEvent(long eventId);
     List<Sponsor> readByName(String spName);
-    Sponsor assignEventToSponsor(Sponsor sponsor, Long eventId);
+
 }
 

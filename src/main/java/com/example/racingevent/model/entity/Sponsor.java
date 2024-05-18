@@ -1,6 +1,10 @@
 package com.example.racingevent.model.entity;
 
+import com.example.racingevent.model.serializer.RacingEventDTOSerializer;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +24,6 @@ public class Sponsor extends AbstractEntity{
     private LocalDateTime dateOfContract;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "`event_id`", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonSerialize(using = RacingEventDTOSerializer.class)
     private RacingEvent spEvents;
 }

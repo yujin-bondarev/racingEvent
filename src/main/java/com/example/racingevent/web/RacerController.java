@@ -39,12 +39,24 @@ public class RacerController extends AbstractController<Racer> {
         return new ResponseEntity<>(racers, headers, HttpStatus.OK);
     }
 
-    @PutMapping("/{rcId}/racingEvent/{eventId}")
-    public Racer assignRacingEventToRacer(
-            @PathVariable Long rcId,
-            @PathVariable Long eventId
-    ){
-        return racerService.assignEventToRacer(rcId, eventId);
+    @PostMapping("/create")
+    public ResponseEntity<?> createRacer(@RequestBody Racer racer) {
+        try {
+            racerService.save(racer);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<?> updateRacer(@RequestBody Racer racer) {
+        try {
+            racerService.edit(racer);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override

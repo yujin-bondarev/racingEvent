@@ -1,6 +1,9 @@
 package com.example.racingevent.model.entity;
 
+import com.example.racingevent.model.serializer.RacingEventDTOSerializer;
+import com.example.racingevent.model.serializer.RacingEventSetDTOSerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +13,9 @@ import java.util.Set;
 @Entity
 @Table(name = "viewer")
 @AttributeOverride(name = "id", column = @Column(name = "`vw_id`"))
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 public class Viewer extends AbstractEntity {
     @Column(name = "vw_name")
     private String vwName;
@@ -22,7 +27,7 @@ public class Viewer extends AbstractEntity {
             joinColumns = @JoinColumn(name = "vw_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonSerialize(using = RacingEventSetDTOSerializer.class)
     private Set<RacingEvent> vwEvents = new HashSet<>();
 
 }

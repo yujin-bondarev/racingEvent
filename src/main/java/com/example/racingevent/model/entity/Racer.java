@@ -1,6 +1,9 @@
 package com.example.racingevent.model.entity;
 
+import com.example.racingevent.model.serializer.RacingEventDTOSerializer;
+import com.example.racingevent.model.serializer.RacingEventSetDTOSerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +13,9 @@ import java.util.Set;
 @Entity
 @Table(name = "racer")
 @AttributeOverride(name = "id", column = @Column(name = "`rc_id`"))
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 public class Racer extends AbstractEntity {
 
     @Column(name = "rc_name")
@@ -23,6 +28,6 @@ public class Racer extends AbstractEntity {
             joinColumns = @JoinColumn(name = "rc_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonSerialize(using = RacingEventSetDTOSerializer.class)
     private Set<RacingEvent> rcEvents = new HashSet<>();
 }

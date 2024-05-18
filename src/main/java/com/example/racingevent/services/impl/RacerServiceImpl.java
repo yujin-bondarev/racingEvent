@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RacerServiceImpl implements RacerService {
@@ -36,33 +37,28 @@ public class RacerServiceImpl implements RacerService {
 
     @Override
     public void save(Racer entity) {
+        Set<RacingEvent> events = entity.getRcEvents().stream()
+                .map(event -> racingEventRepository.findById(event.getId()).orElseThrow(() -> new IllegalArgumentException("Event with id " + event.getId() + " not found")))
+                .collect(Collectors.toSet());
+        entity.setRcEvents(events);
         racerRepository.save(entity);
+    }
+
+    @Override
+    public void edit(Racer entity) {
+        Racer existingRacer = racerRepository.findById(entity.getId()).orElseThrow(() -> new IllegalArgumentException("Racer not found"));
+        Set<RacingEvent> events = entity.getRcEvents().stream()
+                .map(event -> racingEventRepository.findById(event.getId()).orElseThrow(() -> new IllegalArgumentException("Event with id " + event.getId() + " not found")))
+                .collect(Collectors.toSet());
+        existingRacer.setName(entity.getName());
+        existingRacer.setCarModel(entity.getCarModel());
+        existingRacer.setRcEvents(events);
+        racerRepository.save(existingRacer);
     }
 
     @Override
     public void delete(Long id) {
         racerRepository.deleteById(id);
-    }
-
-    @Override
-    public void edit(Racer entity) {
-        Racer existingRacer = racerRepository.findById(entity.getId()).orElseThrow(IllegalArgumentException::new);
-        RacingEvent event = (RacingEvent) existingRacer.getRcEvents();
-        existingRacer.setName(entity.getName());
-        existingRacer.setCarModel(entity.getCarModel());
-        event.getRacers().add(existingRacer);
-        racingEventRepository.save(event);
-        racerRepository.save(existingRacer);
-    }
-
-    public Racer assignEventToRacer(Long rcId, Long eventId) {
-        Set<RacingEvent> eventSet = null;
-        Racer racer = racerRepository.findById(rcId).orElseThrow(IllegalArgumentException::new);
-        RacingEvent racingEvent = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
-        eventSet =  racer.getRcEvents();
-        eventSet.add(racingEvent);
-        racer.setRcEvents(eventSet);
-        return racerRepository.save(racer);
     }
 
     @Override

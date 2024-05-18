@@ -30,12 +30,26 @@ public class SponsorController extends AbstractController<Sponsor> {
         return new ResponseEntity<>(sponsors, headers, HttpStatus.OK);
     }
 
-    @PostMapping("/create/assignEvent/{eventId}")
-    public Sponsor assignEventToSponsor(
-            @RequestBody Sponsor sponsor,
-            @PathVariable Long eventId) {
-        return sponsorService.assignEventToSponsor(sponsor, eventId);
+    @PostMapping("/create")
+    public ResponseEntity<?> createSponsor(@RequestBody Sponsor sponsor) {
+        try {
+            sponsorService.save(sponsor);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
+
+    @PutMapping("/edit")
+    public ResponseEntity<?> updateSponsor(@RequestBody Sponsor sponsor) {
+        try {
+            sponsorService.edit(sponsor);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Override
     public SponsorService getService() {
         return sponsorService;

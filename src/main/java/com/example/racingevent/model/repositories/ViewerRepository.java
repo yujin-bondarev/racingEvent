@@ -12,6 +12,6 @@ import java.util.List;
 public interface ViewerRepository extends JpaRepository<Viewer, Long> {
     List<Viewer> findByVwName(String vwName);
     List<Viewer> findByVwEvents_Id(long id);
-
+    List<Viewer> findByVwEvents_IdAndTicketType(Long eventId, String ticketType);
     List<Viewer> findByTicketType(String ticketType);
 }

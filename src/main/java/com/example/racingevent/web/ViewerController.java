@@ -40,12 +40,24 @@ public class ViewerController extends AbstractController<Viewer> {
         return new ResponseEntity<>(viewers, headers, HttpStatus.OK);
     }
 
-    @PutMapping("/{vwId}/racingEvent/{eventId}")
-    public Viewer assignRacingEventToRacer(
-            @PathVariable Long vwId,
-            @PathVariable Long eventId
-    ){
-        return viewerService.assignEventToViewer(vwId, eventId);
+    @PostMapping("/create")
+    public ResponseEntity<?> createViewer(@RequestBody Viewer viewer) {
+        try {
+            viewerService.save(viewer);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<?> updateViewer(@RequestBody Viewer viewer) {
+        try {
+            viewerService.edit(viewer);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override

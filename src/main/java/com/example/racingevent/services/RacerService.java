@@ -10,7 +10,5 @@ public interface RacerService extends Service<Racer> {
         List<Racer> readByEvent(long eventId);
         List<Racer> readByName(String name);
         List<Racer> readByCarModel(String carModel);
-
-        Racer assignEventToRacer(Long rcId, Long eventId);
 }
 

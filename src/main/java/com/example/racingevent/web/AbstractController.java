@@ -38,18 +38,6 @@ public abstract class AbstractController<T extends AbstractEntity> {
         return new ResponseEntity<>(entity, headers, HttpStatus.OK);
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<String> put(@RequestBody T entity) {
-        getService().save(entity);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<String> post(@RequestBody T entity) {
-        getService().save(entity);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable long id) {
         getService().delete(id);

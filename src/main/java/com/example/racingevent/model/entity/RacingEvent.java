@@ -1,7 +1,11 @@
 package com.example.racingevent.model.entity;
 
+import com.example.racingevent.model.serializer.RacerDTOSerializer;
+import com.example.racingevent.model.serializer.SponsorDTOSerializer;
+import com.example.racingevent.model.serializer.ViewerDTOSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,11 +27,14 @@ public class RacingEvent extends AbstractEntity{
     private String location;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "rcEvents", cascade = {CascadeType.ALL})
+    @JsonSerialize(using = RacerDTOSerializer.class)
     private Set<Racer> racers = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "vwEvents", cascade = {CascadeType.ALL})
+    @JsonSerialize(using = ViewerDTOSerializer.class)
     private Set<Viewer> viewers = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy="spEvents", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @JsonSerialize(using = SponsorDTOSerializer.class)
     private Set<Sponsor> sponsors = new HashSet<>();
 }

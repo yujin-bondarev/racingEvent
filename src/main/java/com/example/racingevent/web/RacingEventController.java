@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -34,6 +35,12 @@ public class RacingEventController extends AbstractController<RacingEvent> {
     public ResponseEntity<List<Viewer>> getEventViewersByTicketType(@PathVariable Long id, @PathVariable String ticketType) {
         List<Viewer> viewers = racingEventService.getEventViewersByTicketType(id, ticketType);
         return new ResponseEntity<>(viewers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/sponsor-budgets-sum")
+    public ResponseEntity<BigDecimal> getSponsorBudgetsSum(@PathVariable Long id) {
+        BigDecimal sum = racingEventService.getSumOfSponsorBudgets(id);
+        return new ResponseEntity<>(sum, HttpStatus.OK);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.example.racingevent.services.RacingEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -54,6 +55,14 @@ public class RacingEventServiceImpl implements RacingEventService {
         existingEvent.setDate(entity.getDate());
         existingEvent.setLocation(entity.getLocation());
         racingEventRepository.save(existingEvent);
+    }
+
+    @Override
+    public BigDecimal getSumOfSponsorBudgets(Long eventId) {
+        RacingEvent event = racingEventRepository.findById(eventId).orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        return event.getSponsors().stream()
+                .map(sponsor -> new BigDecimal(sponsor.getBudget()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override

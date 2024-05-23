@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface Service<T extends AbstractEntity> {
 
-    T read(Long id);
+    T readById(Long id);
+
+    List<T> readByName(String name);
 
     List<T> read();
 

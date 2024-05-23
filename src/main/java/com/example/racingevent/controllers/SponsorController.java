@@ -1,11 +1,11 @@
-package com.example.racingevent.web;
+package com.example.racingevent.controllers;
 
-import com.example.racingevent.model.entity.Racer;
 import com.example.racingevent.model.entity.Sponsor;
 import com.example.racingevent.services.SponsorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +30,7 @@ public class SponsorController extends AbstractController<Sponsor> {
         return new ResponseEntity<>(sponsors, headers, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
     public ResponseEntity<?> createSponsor(@RequestBody Sponsor sponsor) {
         try {
@@ -40,6 +41,7 @@ public class SponsorController extends AbstractController<Sponsor> {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/edit")
     public ResponseEntity<?> updateSponsor(@RequestBody Sponsor sponsor) {
         try {

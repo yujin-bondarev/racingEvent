@@ -1,12 +1,11 @@
-package com.example.racingevent.web;
+package com.example.racingevent.controllers;
 
-import com.example.racingevent.model.entity.Racer;
-import com.example.racingevent.model.entity.RacingEvent;
 import com.example.racingevent.model.entity.Viewer;
 import com.example.racingevent.services.ViewerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +39,7 @@ public class ViewerController extends AbstractController<Viewer> {
         return new ResponseEntity<>(viewers, headers, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
     public ResponseEntity<?> createViewer(@RequestBody Viewer viewer) {
         try {
@@ -50,6 +50,7 @@ public class ViewerController extends AbstractController<Viewer> {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/edit")
     public ResponseEntity<?> updateViewer(@RequestBody Viewer viewer) {
         try {

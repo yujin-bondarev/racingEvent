@@ -27,7 +27,7 @@ public class ViewerServiceImpl implements ViewerService {
     }
 
     @Override
-    public Viewer read(Long id) {
+    public Viewer readById(Long id) {
         return viewerRepository.findById(id).orElse(null);
     }
 

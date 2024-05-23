@@ -26,7 +26,7 @@ public class RacerServiceImpl implements RacerService {
     }
 
     @Override
-    public Racer read(Long id) {
+    public Racer readById(Long id) {
         return racerRepository.findById(id).orElse(null);
     }
 

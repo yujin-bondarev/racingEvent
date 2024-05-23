@@ -2,6 +2,7 @@ package com.example.racingevent.services.impl;
 
 import com.example.racingevent.model.entity.RacingEvent;
 import com.example.racingevent.model.entity.Viewer;
+import com.example.racingevent.model.entity.Sponsor;
 import com.example.racingevent.model.repositories.RacingEventRepository;
 import com.example.racingevent.model.repositories.ViewerRepository;
 import com.example.racingevent.services.RacingEventService;
@@ -9,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RacingEventServiceImpl implements RacingEventService {
@@ -24,7 +27,7 @@ public class RacingEventServiceImpl implements RacingEventService {
     }
 
     @Override
-    public RacingEvent read(Long id) {
+    public RacingEvent readById(Long id) {
         return racingEventRepository.findById(id).orElse(null);
     }
 
@@ -64,6 +67,15 @@ public class RacingEventServiceImpl implements RacingEventService {
                 .map(sponsor -> new BigDecimal(sponsor.getBudget()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+    @Override
+    public List<Sponsor> getSponsorsContractedBeforeEvent(Long eventId, int months) {
+        RacingEvent event = racingEventRepository.findById(eventId).orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        LocalDateTime twoMonthsBeforeEvent = event.getDate().minusMonths(months);
+        return event.getSponsors().stream()
+                .filter(sponsor -> sponsor.getDateOfContract().isAfter(twoMonthsBeforeEvent) && sponsor.getDateOfContract().isBefore(event.getDate()))
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<Viewer> getEventViewersByTicketType(Long eventId, String ticketType) {

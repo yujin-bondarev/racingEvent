@@ -24,7 +24,7 @@ public class SponsorServiceImpl implements SponsorService {
     }
 
     @Override
-    public Sponsor read(Long id) {
+    public Sponsor readById(Long id) {
         return sponsorRepository.findById(id).orElse(null);
     }
 
@@ -54,12 +54,6 @@ public class SponsorServiceImpl implements SponsorService {
         existingSponsor.setDateOfContract(entity.getDateOfContract());
         existingSponsor.setSpEvents(existingEvent);
         sponsorRepository.save(existingSponsor);
-    }
-
-    public Sponsor assignEventToSponsor(Sponsor sponsor, Long eventId) {
-        RacingEvent racingEvent = racingEventRepository.findById(eventId).orElseThrow(IllegalArgumentException::new);
-        sponsor.setSpEvents(racingEvent);
-        return sponsorRepository.save(sponsor);
     }
 
     @Override

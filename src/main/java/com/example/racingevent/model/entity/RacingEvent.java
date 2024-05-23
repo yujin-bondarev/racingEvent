@@ -3,8 +3,6 @@ package com.example.racingevent.model.entity;
 import com.example.racingevent.model.serializer.RacerDTOSerializer;
 import com.example.racingevent.model.serializer.SponsorDTOSerializer;
 import com.example.racingevent.model.serializer.ViewerDTOSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;

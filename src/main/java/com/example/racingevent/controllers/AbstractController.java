@@ -22,6 +22,7 @@ public abstract class AbstractController<T extends AbstractEntity> {
         headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
+    @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping
     public ResponseEntity<List<T>> get() {
         List<T> entities = getService().read();
@@ -31,6 +32,7 @@ public abstract class AbstractController<T extends AbstractEntity> {
         return new ResponseEntity<>(entities, headers, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/{id}")
     public ResponseEntity<T> getById(@PathVariable long id) {
         T entity = getService().readById(id);
@@ -40,6 +42,7 @@ public abstract class AbstractController<T extends AbstractEntity> {
         return new ResponseEntity<>(entity, headers, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/name/{name}")
     public ResponseEntity<List<T>> getByName(@PathVariable String name) {
         List<T> entity = getService().readByName(name);
@@ -49,7 +52,7 @@ public abstract class AbstractController<T extends AbstractEntity> {
         return new ResponseEntity<>(entity, headers, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable long id) {
         getService().delete(id);

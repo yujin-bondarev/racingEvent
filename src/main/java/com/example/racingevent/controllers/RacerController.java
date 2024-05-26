@@ -22,6 +22,7 @@ public class RacerController extends AbstractController<Racer> {
         this.racerService = racerService;
     }
 
+    @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/event/{id}")
     public ResponseEntity<List<Racer>> getRacersByEvent(@PathVariable long id) {
         List<Racer> racers = racerService.readByEvent(id);
@@ -31,6 +32,7 @@ public class RacerController extends AbstractController<Racer> {
         return new ResponseEntity<>(racers, headers, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/carModel/{carModel}")
     public ResponseEntity<List<Racer>> getRacersByCarModel(@PathVariable String carModel) {
         List<Racer> racers = racerService.readByCarModel(carModel);
@@ -40,7 +42,7 @@ public class RacerController extends AbstractController<Racer> {
         return new ResponseEntity<>(racers, headers, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createRacer(@RequestBody Racer racer) {
         try {
@@ -51,7 +53,7 @@ public class RacerController extends AbstractController<Racer> {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<?> updateRacer(@RequestBody Racer racer) {
         try {

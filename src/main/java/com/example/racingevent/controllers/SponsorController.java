@@ -21,6 +21,7 @@ public class SponsorController extends AbstractController<Sponsor> {
         this.sponsorService = sponsorService;
     }
 
+    @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/event/{id}")
     public ResponseEntity<List<Sponsor>> getSponsorsByEvent(@PathVariable long id) {
         List<Sponsor> sponsors = sponsorService.readByEvent(id);
@@ -30,7 +31,7 @@ public class SponsorController extends AbstractController<Sponsor> {
         return new ResponseEntity<>(sponsors, headers, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createSponsor(@RequestBody Sponsor sponsor) {
         try {
@@ -41,7 +42,7 @@ public class SponsorController extends AbstractController<Sponsor> {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<?> updateSponsor(@RequestBody Sponsor sponsor) {
         try {

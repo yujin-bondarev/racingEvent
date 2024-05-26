@@ -21,6 +21,7 @@ public class ViewerController extends AbstractController<Viewer> {
         this.viewerService = viewerService;
     }
 
+    @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/event/{id}")
     public ResponseEntity<List<Viewer>> getViewersByEvent(@PathVariable long id) {
         List<Viewer> viewers = viewerService.readByEvent(id);
@@ -30,6 +31,7 @@ public class ViewerController extends AbstractController<Viewer> {
         return new ResponseEntity<>(viewers, headers, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/ticketType/{ticketType}")
     public ResponseEntity<List<Viewer>> getViewersByTicketType(@PathVariable String ticketType) {
         List<Viewer> viewers = viewerService.readByTicketType(ticketType);
@@ -39,7 +41,7 @@ public class ViewerController extends AbstractController<Viewer> {
         return new ResponseEntity<>(viewers, headers, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createViewer(@RequestBody Viewer viewer) {
         try {
@@ -50,7 +52,7 @@ public class ViewerController extends AbstractController<Viewer> {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<?> updateViewer(@RequestBody Viewer viewer) {
         try {

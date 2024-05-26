@@ -1,6 +1,5 @@
 package com.example.racingevent.security.service;
 
-import com.example.racingevent.model.entity.Viewer;
 import com.example.racingevent.security.domain.model.Role;
 import com.example.racingevent.security.domain.model.User;
 import com.example.racingevent.security.repository.UserRepository;

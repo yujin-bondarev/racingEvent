@@ -1,6 +1,5 @@
 package com.example.racingevent.controllers;
 
-import com.example.racingevent.model.entity.Racer;
 import com.example.racingevent.model.entity.RacingEvent;
 import com.example.racingevent.model.entity.Sponsor;
 import com.example.racingevent.model.entity.Viewer;
@@ -25,37 +24,38 @@ public class RacingEventController extends AbstractController<RacingEvent> {
         this.racingEventService = racingEventService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create")
-    public ResponseEntity<?> createEvent(@RequestBody RacingEvent event) {
-        try {
-            racingEventService.save(event);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/{id}/viewersByTicket/{ticketType}")
     public ResponseEntity<List<Viewer>> getEventViewersByTicketType(@PathVariable Long id, @PathVariable String ticketType) {
-        List<Viewer> viewers = racingEventService.getEventViewersByTicketType(id, ticketType);
-        return new ResponseEntity<>(viewers, HttpStatus.OK);
+        try {
+            List<Viewer> viewers = racingEventService.getEventViewersByTicketType(id, ticketType);
+            return new ResponseEntity<>(viewers, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/{id}/sponsor-budgets-sum")
     public ResponseEntity<BigDecimal> getSponsorBudgetsSum(@PathVariable Long id) {
-        BigDecimal sum = racingEventService.getSumOfSponsorBudgets(id);
-        return new ResponseEntity<>(sum, HttpStatus.OK);
+        try {
+            BigDecimal sum = racingEventService.getSumOfSponsorBudgets(id);
+            return new ResponseEntity<>(sum, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PreAuthorize("hasAnyRole(\"USER\", \"ADMIN\")")
     @GetMapping("/{id}/sponsorContract/{month}")
     public ResponseEntity<List<Sponsor>> getSponsorsContractedBeforeEvent(@PathVariable Long id,
                                                                           @PathVariable int month) {
-        List<Sponsor> sponsors = racingEventService.getSponsorsContractedBeforeEvent(id, month);
-        return new ResponseEntity<>(sponsors, HttpStatus.OK);
+        try {
+            List<Sponsor> sponsors = racingEventService.getSponsorsContractedBeforeEvent(id, month);
+            return new ResponseEntity<>(sponsors, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override

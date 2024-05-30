@@ -1,7 +1,6 @@
 package com.example.racingevent.controllers;
 
 import com.example.racingevent.model.entity.Racer;
-import com.example.racingevent.model.entity.Sponsor;
 import com.example.racingevent.services.RacerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,28 +39,6 @@ public class RacerController extends AbstractController<Racer> {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(racers, headers, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create")
-    public ResponseEntity<?> createRacer(@RequestBody Racer racer) {
-        try {
-            racerService.save(racer);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/edit")
-    public ResponseEntity<?> updateRacer(@RequestBody Racer racer) {
-        try {
-            racerService.edit(racer);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
     }
 
     @Override

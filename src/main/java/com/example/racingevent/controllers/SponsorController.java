@@ -31,28 +31,6 @@ public class SponsorController extends AbstractController<Sponsor> {
         return new ResponseEntity<>(sponsors, headers, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create")
-    public ResponseEntity<?> createSponsor(@RequestBody Sponsor sponsor) {
-        try {
-            sponsorService.save(sponsor);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/edit")
-    public ResponseEntity<?> updateSponsor(@RequestBody Sponsor sponsor) {
-        try {
-            sponsorService.edit(sponsor);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
     @Override
     public SponsorService getService() {
         return sponsorService;

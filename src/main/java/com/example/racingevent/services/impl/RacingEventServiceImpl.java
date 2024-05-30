@@ -62,14 +62,17 @@ public class RacingEventServiceImpl implements RacingEventService {
 
     @Override
     public BigDecimal getSumOfSponsorBudgets(Long eventId) {
-        RacingEvent event = racingEventRepository.findById(eventId).orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        RacingEvent event = racingEventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + eventId));
         return event.getSponsors().stream()
                 .map(sponsor -> new BigDecimal(sponsor.getBudget()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
     @Override
     public List<Sponsor> getSponsorsContractedBeforeEvent(Long eventId, int months) {
-        RacingEvent event = racingEventRepository.findById(eventId).orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        RacingEvent event = racingEventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + eventId));
         LocalDateTime twoMonthsBeforeEvent = event.getDate().minusMonths(months);
         return event.getSponsors().stream()
                 .filter(sponsor -> sponsor.getDateOfContract().isAfter(twoMonthsBeforeEvent) && sponsor.getDateOfContract().isBefore(event.getDate()))
@@ -79,7 +82,9 @@ public class RacingEventServiceImpl implements RacingEventService {
 
     @Override
     public List<Viewer> getEventViewersByTicketType(Long eventId, String ticketType) {
-        return viewerRepository.findByVwEvents_IdAndTicketType(eventId, ticketType);
+        RacingEvent event = racingEventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + eventId));
+        return viewerRepository.findByVwEvents_IdAndTicketType(event, ticketType);
     }
 }
 

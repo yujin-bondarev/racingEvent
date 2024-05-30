@@ -41,28 +41,6 @@ public class ViewerController extends AbstractController<Viewer> {
         return new ResponseEntity<>(viewers, headers, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create")
-    public ResponseEntity<?> createViewer(@RequestBody Viewer viewer) {
-        try {
-            viewerService.save(viewer);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/edit")
-    public ResponseEntity<?> updateViewer(@RequestBody Viewer viewer) {
-        try {
-            viewerService.edit(viewer);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
     @Override
     public ViewerService getService() {
         return viewerService;

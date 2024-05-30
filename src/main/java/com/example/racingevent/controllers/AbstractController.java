@@ -1,7 +1,6 @@
 package com.example.racingevent.controllers;
 
 import com.example.racingevent.model.entity.AbstractEntity;
-import com.example.racingevent.model.entity.Racer;
 import com.example.racingevent.services.Service;
 import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpHeaders;
@@ -50,6 +49,28 @@ public abstract class AbstractController<T extends AbstractEntity> {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(entity, headers, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
+    public ResponseEntity<?> create(@RequestBody T entity) {
+        try {
+            getService().save(entity);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/edit")
+    public ResponseEntity<?> update(@RequestBody T entity) {
+        try {
+            getService().edit(entity);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
